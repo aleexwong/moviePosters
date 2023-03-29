@@ -1,29 +1,38 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 function MoviePosterCard(props) {
-    const [movie, setMovie] = useState("");
+  const [movie, setMovie] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
-    const fetchMovie = () => {
-        fetch("https://www.omdbapi.com/?t=batman&apikey=a35d47f2")
-        .then((res) => res.json())
-        .then((data) => {
-            setMovie(data);
-        });
-    }
+  const handleSearch = () => {
+    fetch(`https://www.omdbapi.com/?s=${searchQuery}&apikey=a35d47f2`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMovie(data);
+        console.log(data);
+      });
+  };
 
-    useEffect(() => {
-        fetchMovie();
-    }, []);
+  useEffect(() => {
+    handleSearch();
+  }, []);
 
-
-    return (
-        <div className="movie-poster-card">
-            <h1>Movie Poster Card</h1>
-            <h2>{movie.Title}</h2>
-            <h2>{movie.Year}</h2>
-            <img src={movie.Poster} alt="movie poster" />
-        </div>
-    );
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
+      <ul>
+        {searchResults.map((result) => (
+          <li key={result.id}>{result.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-
 export default MoviePosterCard;
