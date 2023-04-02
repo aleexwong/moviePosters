@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 
 function MoviePosterCard(props) {
-  const [movie, setMovie] = useState("");
+  const [movie, setMovie] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const result = [];
 
   const handleSearch = () => {
     fetch(`https://www.omdbapi.com/?s=${searchQuery}&apikey=a35d47f2`)
       .then((res) => res.json())
       .then((data) => {
-        setMovie(data);
-        console.log(data);
+        setSearchResults(data.Search);
+        console.log(data.Search);
       });
   };
 
@@ -28,9 +29,13 @@ function MoviePosterCard(props) {
       />
       <button onClick={handleSearch}>Search</button>
       <ul>
-        {searchResults.map((result) => (
-          <li key={result.id}>{result.title}</li>
-        ))}
+        {searchResults &&
+          searchResults.map((result) => (
+            <div key={result.imdbID}>
+              <li>{result.Title}</li>
+              <img src={result.Poster} alt={result.title} />
+            </div>
+          ))}
       </ul>
     </div>
   );
