@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+import picture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
   const [movie, setMovie] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const pageCount = useRef(1);
+  const maxSubString = 30;
+  // Set default picture URL if pictureUrl is empty or null
+  const { pictureUrl } = props;
+  const defaultPicture = picture;
+  const pictureSource =
+    pictureUrl && pictureUrl !== "N/A" ? pictureUrl : defaultPicture;
 
   const handleSearch = () => {
     fetch(
@@ -13,7 +20,9 @@ function MoviePosterCard(props) {
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data.Search);
-        console.log(pageCount);
+        console.log(data.Search);
+        // additionally when added page we are limited to 10 results per page,
+        // new updates will require a new request again, everytime.
       });
   };
 
@@ -22,7 +31,7 @@ function MoviePosterCard(props) {
   }, []);
 
   return (
-    <div>
+    <div className="search-bar">
       <input
         type="text"
         placeholder="Search"
@@ -33,9 +42,20 @@ function MoviePosterCard(props) {
       <ul>
         {searchResults &&
           searchResults.map((result) => (
-            <div key={result.imdbID}>
-              <div>{result.Title}</div>
-              <img src={result.Poster} alt={result.title} />
+            <div className="movie-list" key={result.imdbID}>
+              <div className="movie-list-image">
+                <img
+                  src={
+                    result.Poster && result.Poster !== "N/A"
+                      ? result.Poster
+                      : picture
+                  }
+                  alt={result.title}
+                />
+              </div>
+              <div className="movie-list-title">
+                {result.Title.substring(0, maxSubString)}
+              </div>
             </div>
           ))}
       </ul>
