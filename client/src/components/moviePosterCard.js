@@ -6,7 +6,7 @@ function MoviePosterCard(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const pageCount = useRef(1);
-  const maxSubString = 30;
+  const maxSubString = 25;
   // Set default picture URL if pictureUrl is empty or null
   const { pictureUrl } = props;
   const defaultPicture = picture;
@@ -20,7 +20,7 @@ function MoviePosterCard(props) {
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data.Search);
-        console.log(data.Search);
+        console.log(pageCount);
         // additionally when added page we are limited to 10 results per page,
         // new updates will require a new request again, everytime.
       });
@@ -34,7 +34,7 @@ function MoviePosterCard(props) {
     <div className="search-bar">
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Search for a movie"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
@@ -62,16 +62,15 @@ function MoviePosterCard(props) {
       <div className="page-buttons">
         <button
           onClick={() => {
-            if (pageCount <= 1) {
-              pageCount = 1;
-              handleSearch();
+            if (pageCount.current <= 1) {
+              pageCount.current = 1;
             } else {
               pageCount.current--;
               handleSearch();
             }
           }}
         >
-          Previous
+          Prev
         </button>
         <button
           onClick={() => {
