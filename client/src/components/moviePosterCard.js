@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import picture from "../constants/images/default-movie-poster.png";
+import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
   const [movie, setMovie] = useState([]);
@@ -9,13 +9,10 @@ function MoviePosterCard(props) {
   const maxSubString = 25;
   // Set default picture URL if pictureUrl is empty or null
   const { pictureUrl } = props;
-  const defaultPicture = picture;
-  const pictureSource =
-    pictureUrl && pictureUrl !== "N/A" ? pictureUrl : defaultPicture;
 
   const handleSearch = () => {
     fetch(
-      `https://www.omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=a35d47f2`
+      `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -48,13 +45,14 @@ function MoviePosterCard(props) {
                   src={
                     result.Poster && result.Poster !== "N/A"
                       ? result.Poster
-                      : picture
+                      : defaultPicture
                   }
                   alt={result.title}
                 />
               </div>
               <div className="movie-list-title">
                 {result.Title.substring(0, maxSubString)}
+                {result.Title.length > maxSubString && "..."}
               </div>
             </div>
           ))}
