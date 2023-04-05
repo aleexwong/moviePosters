@@ -54,6 +54,10 @@ function MoviePosterCard(props) {
                 {result.Title.substring(0, maxSubString)}
                 {result.Title.length > maxSubString && "..."}
               </div>
+              <div className="movie-list-year">{result.Year}</div>
+              <div className="movie-list-button">
+                <button>View</button>
+              </div>
             </div>
           ))}
       </ul>
