@@ -25,9 +25,20 @@ app.get("/api/search", (req, res) => {
   const searchQuery = req.query.searchQuery;
   const page = req.query.page;
   const url = `${api}?s=${searchQuery}&page=${page}&apikey=${apiKey}`;
-  axios.get(url).then((response) => {
-    res.send(response.data);
-  });
+  switch (searchQuery) {
+    case "":
+      break;
+    case undefined:
+      res.send([]);
+      break;
+    case null:
+      res.send([]);
+      break;
+    default:
+      axios.get(url).then((response) => {
+        res.send(response.data);
+      });
+  }
 });
 
 app.get("/api/title", (req, res) => {});
