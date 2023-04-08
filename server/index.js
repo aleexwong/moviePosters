@@ -1,5 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+var mysql = require("mysql");
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "secret",
+});
+
+con.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
 
 // dotenv file needed
 const dotenv = require("dotenv");
