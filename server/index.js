@@ -14,12 +14,32 @@ con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
   con.query("DROP DATABASE IF EXISTS mydb", function (err, result) {
+    // will drop the database if it exists, removes all previous data
+    // only for testing purposes, will be removed in production
     if (err) throw err;
   });
+
   con.query("CREATE DATABASE IF NOT EXISTS mydb", function (err, result) {
     if (err) throw err;
   });
+
+  // use the database before creating any new tables
+  con.query("USE mydb", function (err, result) {
+    if (err) throw err;
+  });
+
+  var createMovieTable = `CREATE TABLE movies 
+    ( id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100), likes INT, dislikes INT)`; // todo add more columns
+
+  con.query(createMovieTable, function (err, result) {
+    if (err) throw err;
+    console.log("Table created successfully");
+  });
 });
+
+// todo create a database with a table for movies
+// todo create a database with a table for likes and dislikes
 
 // dotenv file needed
 const dotenv = require("dotenv");
