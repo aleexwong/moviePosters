@@ -1,16 +1,24 @@
 const express = require("express");
 const cors = require("cors");
 var mysql = require("mysql");
-
+// may be better to replace with mysql2,
 var con = mysql.createConnection({
   host: "localhost",
+  port: "3306",
   user: "root",
   password: "secret",
+  database: "mydb",
 });
 
 con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
+  con.query("DROP DATABASE IF EXISTS mydb", function (err, result) {
+    if (err) throw err;
+  });
+  con.query("CREATE DATABASE IF NOT EXISTS mydb", function (err, result) {
+    if (err) throw err;
+  });
 });
 
 // dotenv file needed
@@ -38,7 +46,7 @@ app.get("/api/search", (req, res) => {
   const page = req.query.page;
   const url = `${api}?s=${searchQuery}&page=${page}&apikey=${apiKey}`;
   switch (searchQuery) {
-    case "":
+    case "": // if search bar is empty, return nothing to the user
       break;
     case undefined:
       res.send([]);

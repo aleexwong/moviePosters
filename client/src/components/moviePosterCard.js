@@ -74,6 +74,7 @@ function MoviePosterCard(props) {
         >
           Prev
         </button>
+        <button>{pageCount.current}</button>
         <button
           onClick={() => {
             pageCount.current++;
