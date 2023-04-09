@@ -30,16 +30,16 @@ con.connect(function (err) {
 
   var createMovieTable = `CREATE TABLE movies 
     ( id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(100), likes INT, dislikes INT)`; // todo add more columns
+      imdbId VARCHAR(100),
+      movieName VARCHAR(100), 
+      movieLikes INT, 
+      movieDislikes INT)`; // todo add more columns
 
   con.query(createMovieTable, function (err, result) {
     if (err) throw err;
     console.log("Table created successfully");
   });
 });
-
-// todo create a database with a table for movies
-// todo create a database with a table for likes and dislikes
 
 // dotenv file needed
 const dotenv = require("dotenv");
@@ -81,4 +81,40 @@ app.get("/api/search", (req, res) => {
   }
 });
 
-app.get("/api/title", (req, res) => {});
+function asyncWrapper(callback) {
+  return function (req, res, next) {
+    callback(req, res, next).catch(next);
+  };
+}
+
+app.post(
+  "/api/like",
+  asyncWrapper(async (req, res) => {
+    console.log(req.body); // add this line to check the value of req.body
+    const imdbId = "12345";
+    const movieName = "test";
+    const movieLikes = 1;
+    const movieDislikes = 0;
+
+    if (!imdbId) {
+      console.log("imdbId is missing from req.body"); // add this line to check if imdbId is missing
+      return res.status(400).json({ error: "Missing imdbId field" });
+    }
+
+    const addToLikes = `INSERT INTO movies (
+    imdbId, movieName, movieLikes, movieDislikes) VALUES (?, ?, ?, ?)`;
+
+    con.query(
+      addToLikes,
+      [imdbId, movieName, movieLikes, movieDislikes],
+      function (err, result) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+        console.log("1 record inserted");
+        res.status(200).json({ success: "Record inserted successfully" });
+      }
+    );
+  })
+);
