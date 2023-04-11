@@ -12,19 +12,21 @@ var con = mysql.createConnection({
 
 con.connect(function (err) {
   if (err) throw err;
-  console.log("Connected!");
   con.query("DROP DATABASE IF EXISTS mydb", function (err, result) {
     // will drop the database if it exists, removes all previous data
     // only for testing purposes, will be removed in production
+    console.log("Database dropped successfully");
     if (err) throw err;
   });
 
   con.query("CREATE DATABASE IF NOT EXISTS mydb", function (err, result) {
     if (err) throw err;
+    console.log("Database created successfully");
   });
 
   // use the database before creating any new tables
   con.query("USE mydb", function (err, result) {
+    console.log("Using mydb database");
     if (err) throw err;
   });
 
@@ -32,8 +34,8 @@ con.connect(function (err) {
     ( id INT AUTO_INCREMENT PRIMARY KEY,
       imdbId VARCHAR(100),
       movieName VARCHAR(100), 
-      movieLikes INT, 
-      movieDislikes INT)`; // todo add more columns
+      movieLikes INT DEFAULT 0, 
+      movieDislikes INT DEFAULT 0)`; // todo add more columns
 
   con.query(createMovieTable, function (err, result) {
     if (err) throw err;
@@ -51,6 +53,8 @@ const axios = require("axios");
 
 var api = "https://www.omdbapi.com/";
 const app = express();
+
+app.use(express.json());
 
 app.use(cors());
 app.listen(PORT, () => {
@@ -81,40 +85,40 @@ app.get("/api/search", (req, res) => {
   }
 });
 
-function asyncWrapper(callback) {
-  return function (req, res, next) {
-    callback(req, res, next).catch(next);
-  };
-}
+app.post("/api/like", async (req, res) => {
+  console.log(req.body); // add this line to check the value of req.body
+  const { imdbId, movieName } = req.body;
 
-app.post(
-  "/api/like",
-  asyncWrapper(async (req, res) => {
-    console.log(req.body); // add this line to check the value of req.body
-    const imdbId = "12345";
-    const movieName = "test";
-    const movieLikes = 1;
-    const movieDislikes = 0;
+  if (!imdbId) {
+    console.log("imdbId is missing from req.body"); // add this line to check if imdbId is missing
+    return res.status(400).json({ error: "Missing imdbId field" });
+  }
 
-    if (!imdbId) {
-      console.log("imdbId is missing from req.body"); // add this line to check if imdbId is missing
-      return res.status(400).json({ error: "Missing imdbId field" });
-    }
+  const checkIfMovieExists = `SELECT * FROM movies WHERE imdbId = '${imdbId}'`;
 
-    const addToLikes = `INSERT INTO movies (
-    imdbId, movieName, movieLikes, movieDislikes) VALUES (?, ?, ?, ?)`;
-
-    con.query(
-      addToLikes,
-      [imdbId, movieName, movieLikes, movieDislikes],
-      function (err, result) {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
+  con.query(checkIfMovieExists, function (err, result) {
+    if (err) throw err;
+    if (result.length === 0) {
+      console.log("Movie does not exist in database");
+      const addToLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 1, 0)`;
+      con.query(addToLikes, function (err, result) {
+        if (err) throw err;
         console.log("1 record inserted");
-        res.status(200).json({ success: "Record inserted successfully" });
-      }
-    );
-  })
-);
+        return res
+          .status(200)
+          .json({ success: "Record inserted successfully" });
+      });
+    } else {
+      const currentLikes = result[0].movieLikes;
+      const updateLikes = `UPDATE movies SET movieLikes = ${
+        currentLikes + 1
+      } WHERE imdbId = '${imdbId}'`;
+      con.query(updateLikes, function (err, result) {
+        if (err) throw err;
+        console.log("1 record updated");
+        console.log(currentLikes);
+        return res.status(200).json({ success: "Record updated successfully" });
+      });
+    }
+  });
+});
