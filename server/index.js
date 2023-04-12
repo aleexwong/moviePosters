@@ -55,6 +55,7 @@ var api = "https://www.omdbapi.com/";
 const app = express();
 
 app.use(express.json());
+// no need for body-parser, express.json() is enough
 
 app.use(cors());
 app.listen(PORT, () => {
@@ -65,7 +66,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the movie posters api");
 });
 
-app.get("/api/search", (req, res) => {
+app.get("/api/search", async (req, res) => {
   const searchQuery = req.query.searchQuery;
   const page = req.query.page;
   const url = `${api}?s=${searchQuery}&page=${page}&apikey=${apiKey}`;
@@ -79,7 +80,7 @@ app.get("/api/search", (req, res) => {
       res.send([]);
       break;
     default:
-      axios.get(url).then((response) => {
+      await axios.get(url).then((response) => {
         res.send(response.data);
       });
   }
@@ -88,37 +89,82 @@ app.get("/api/search", (req, res) => {
 app.post("/api/like", async (req, res) => {
   console.log(req.body); // add this line to check the value of req.body
   const { imdbId, movieName } = req.body;
+  const checkIfMovieExists = `SELECT * FROM movies WHERE imdbId = '${imdbId}'`;
 
   if (!imdbId) {
     console.log("imdbId is missing from req.body"); // add this line to check if imdbId is missing
     return res.status(400).json({ error: "Missing imdbId field" });
   }
 
+  con.query(checkIfMovieExists, function (err, result) {
+    try {
+      if (result.length === 0) {
+        console.log("Movie does not exist in database");
+        const addToLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 1, 0)`;
+        con.query(addToLikes, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted");
+          return res
+            .status(200)
+            .json({ success: "Record inserted successfully" });
+        });
+      } else {
+        const currentLikes = result[0].movieLikes;
+        const updateLikes = `UPDATE movies SET movieLikes = ${
+          currentLikes + 1
+        } WHERE imdbId = '${imdbId}'`;
+        con.query(updateLikes, function (err, result) {
+          if (err) throw err;
+          console.log("1 record updated");
+          console.log(currentLikes);
+          return res
+            .status(200)
+            .json({ success: "Record updated successfully" });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+});
+
+app.post("/api/dislike", async (req, res) => {
+  const { imdbId, movieName } = req.body;
   const checkIfMovieExists = `SELECT * FROM movies WHERE imdbId = '${imdbId}'`;
 
+  if (!imdbId) {
+    console.log("imdbId is missing from req.body");
+    return res.status(400).json({ error: "Missing imdbId field" });
+  }
+
   con.query(checkIfMovieExists, function (err, result) {
-    if (err) throw err;
-    if (result.length === 0) {
-      console.log("Movie does not exist in database");
-      const addToLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 1, 0)`;
-      con.query(addToLikes, function (err, result) {
-        if (err) throw err;
-        console.log("1 record inserted");
-        return res
-          .status(200)
-          .json({ success: "Record inserted successfully" });
-      });
-    } else {
-      const currentLikes = result[0].movieLikes;
-      const updateLikes = `UPDATE movies SET movieLikes = ${
-        currentLikes + 1
-      } WHERE imdbId = '${imdbId}'`;
-      con.query(updateLikes, function (err, result) {
-        if (err) throw err;
-        console.log("1 record updated");
-        console.log(currentLikes);
-        return res.status(200).json({ success: "Record updated successfully" });
-      });
+    try {
+      if (result.length === 0) {
+        console.log("Movie does not exist in database");
+        const addToDisLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 0, 1)`;
+        con.query(addToDisLikes, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted");
+          return res
+            .status(200)
+            .json({ success: "Record inserted successfully" });
+        });
+      } else {
+        const currentDislikes = result[0].movieDislikes;
+        const updateDislikes = `UPDATE movies SET movieDislikes = ${
+          currentDislikes + 1
+        } WHERE imdbId = '${imdbId}'`;
+        con.query(updateDislikes, function (err, result) {
+          if (err) throw err;
+          console.log("1 record updated");
+          console.log(currentDislikes);
+          return res
+            .status(200)
+            .json({ success: "Record updated successfully" });
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   });
 });

@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
-  const [movie, setMovie] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const pageCount = useRef(1);
   const maxSubString = 25;
   // Set default picture URL if pictureUrl is empty or null
-  const { pictureUrl } = props;
 
   const handleSearch = () => {
     fetch(
@@ -23,9 +21,9 @@ function MoviePosterCard(props) {
       });
   };
 
-  useEffect(() => {
-    handleSearch();
-  }, []);
+  // useEffect(() => {
+  //   handleSearch();
+  // }, []);
 
   return (
     <div className="search-bar">
