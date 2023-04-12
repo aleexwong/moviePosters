@@ -101,29 +101,40 @@ app.post("/api/like", async (req, res) => {
       if (result.length === 0) {
         console.log("Movie does not exist in database");
         const addToLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 1, 0)`;
-        con.query(addToLikes, function (err, result) {
-          if (err) throw err;
-          console.log("1 record inserted");
-          return res
-            .status(200)
-            .json({ success: "Record inserted successfully" });
-        });
+        try {
+          con.query(addToLikes, function (err, result) {
+            if (err) throw err;
+            console.log("1 record inserted");
+            return res
+              .status(200)
+              .json({ success: "Record inserted successfully" });
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
       } else {
         const currentLikes = result[0].movieLikes;
         const updateLikes = `UPDATE movies SET movieLikes = ${
           currentLikes + 1
         } WHERE imdbId = '${imdbId}'`;
-        con.query(updateLikes, function (err, result) {
-          if (err) throw err;
-          console.log("1 record updated");
-          console.log(currentLikes);
-          return res
-            .status(200)
-            .json({ success: "Record updated successfully" });
-        });
+        try {
+          con.query(updateLikes, function (err, result) {
+            if (err) throw err;
+            console.log("1 record updated");
+            console.log(currentLikes);
+            return res
+              .status(200)
+              .json({ success: "Record updated successfully" });
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   });
 });
@@ -142,26 +153,36 @@ app.post("/api/dislike", async (req, res) => {
       if (result.length === 0) {
         console.log("Movie does not exist in database");
         const addToDisLikes = `INSERT INTO movies (imdbId, movieName, movieLikes, movieDislikes) VALUES ('${imdbId}', '${movieName}', 0, 1)`;
-        con.query(addToDisLikes, function (err, result) {
-          if (err) throw err;
-          console.log("1 record inserted");
-          return res
-            .status(200)
-            .json({ success: "Record inserted successfully" });
-        });
+        try {
+          con.query(addToDisLikes, function (err, result) {
+            if (err) throw err;
+            console.log("1 record inserted");
+            return res
+              .status(200)
+              .json({ success: "Record inserted successfully" });
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
       } else {
         const currentDislikes = result[0].movieDislikes;
         const updateDislikes = `UPDATE movies SET movieDislikes = ${
           currentDislikes + 1
         } WHERE imdbId = '${imdbId}'`;
-        con.query(updateDislikes, function (err, result) {
-          if (err) throw err;
-          console.log("1 record updated");
-          console.log(currentDislikes);
-          return res
-            .status(200)
-            .json({ success: "Record updated successfully" });
-        });
+        try {
+          con.query(updateDislikes, function (err, result) {
+            if (err) throw err;
+            console.log("1 record updated");
+            console.log(currentDislikes);
+            return res
+              .status(200)
+              .json({ success: "Record updated successfully" });
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
       }
     } catch (error) {
       console.log(error);
