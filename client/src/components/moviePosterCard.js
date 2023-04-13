@@ -35,7 +35,7 @@ function MoviePosterCard(props) {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
-      <ul>
+      <ul className="movie-results">
         {searchResults &&
           searchResults.map((result) => (
             <div className="movie-list" key={result.imdbID}>
