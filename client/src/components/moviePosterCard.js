@@ -5,10 +5,14 @@ function MoviePosterCard(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const pageCount = useRef(1);
-  const maxSubString = 25;
+
   // Set default picture URL if pictureUrl is empty or null
 
   const handleSearch = () => {
+    if (searchQuery === "") {
+      pageCount.current = 1;
+      return;
+    }
     fetch(
       // `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
       `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
@@ -45,10 +49,7 @@ function MoviePosterCard(props) {
                   alt={result.title}
                 />
               </div>
-              <div className="movie-list-title">
-                {result.Title.substring(0, maxSubString)}
-                {result.Title.length > maxSubString && "..."}
-              </div>
+              <div className="movie-list-title">{result.Title}</div>
               <div className="movie-list-year">{result.Year}</div>
               <div className="movie-list-button">
                 <button>View</button>

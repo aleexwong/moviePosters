@@ -76,6 +76,10 @@ nav {
   margin-top: 20%;
   margin-bottom: 10px;
   color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 300px;
 }
 
 .page-buttons {
@@ -86,4 +90,55 @@ nav {
   margin-left: 5px;
   padding: 20px;
   width: 30%;
+}
+
+.page-buttons button {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .page-buttons {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .search-bar {
+    padding: 10px;
+  }
+  .search-bar input {
+    width: 75%;
+  }
+  .search-bar button {
+    width: 50%;
+  }
+  .movie-list-image {
+    max-width: 200px;
+    max-height: 300px;
+  }
+  .movie-list-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20%;
+    margin-bottom: 10px;
+    color: black;
+    width: 200px;
+    word-wrap: break-word;
+  }
+  .page-buttons {
+    display: flex;
+    padding: 30px;
+    width: 75%;
+  }
 }
