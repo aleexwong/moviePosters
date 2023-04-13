@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
@@ -10,7 +10,8 @@ function MoviePosterCard(props) {
 
   const handleSearch = () => {
     fetch(
-      `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
+      // `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
+      `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -20,10 +21,6 @@ function MoviePosterCard(props) {
         // new updates will require a new request again, everytime.
       });
   };
-
-  // useEffect(() => {
-  //   handleSearch();
-  // }, []);
 
   return (
     <div className="search-bar">
