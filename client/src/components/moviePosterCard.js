@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import "./moviePosterCard.css";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
