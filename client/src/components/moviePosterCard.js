@@ -7,26 +7,22 @@ function MoviePosterCard(props) {
   const [searchResults, setSearchResults] = useState([]);
   const pageCount = useRef(1);
 
-  // Set default picture URL if pictureUrl is empty or null
-
   const handleSearch = async () => {
     if (searchQuery === "") {
       pageCount.current = 1;
       return;
     }
-    await fetch(
-      // `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
-      `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchResults(data.Search);
-        console.log(pageCount);
-        // additionally when added page we are limited to 10 results per page,
-        // new updates will require a new request again, everytime.
-      });
+    try {
+      const response = await fetch(
+        `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
+      );
+      const data = await response.json();
+      setSearchResults(data.Search);
+      console.log(pageCount);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   return (
     <div className="whole-page">
       <div className="search-bar">
@@ -40,7 +36,7 @@ function MoviePosterCard(props) {
         <ul className="movie-results">
           {searchResults === undefined && (
             <div className="no-results">
-              There are no more movies under "{searchQuery}". Try another search
+              There are no results for "{searchQuery}". Try another search
             </div>
           )}
           {searchResults &&
