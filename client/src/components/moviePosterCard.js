@@ -3,26 +3,54 @@ import "./moviePosterCard.css";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
+  const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const pageCount = useRef(1);
+  const [isUserSearching, setIsUserSearching] = useState(false);
+  const currentPageNumber = useRef(1);
+
+  const resetPageNumber = () => {
+    currentPageNumber.current = 1;
+  };
 
   const handleSearch = async () => {
     if (searchQuery === "") {
-      pageCount.current = 1;
+      currentPageNumber.current = 1;
       return;
     }
+    setIsUserSearching(true);
     try {
+      currentPageNumber.current = 1;
       const response = await fetch(
-        `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
+        `https://omdbapi.com/?s=${searchQuery}&page=${currentPageNumber.current}&apikey=4a3b711b`
       );
       const data = await response.json();
       setSearchResults(data.Search);
-      console.log(pageCount);
+      console.log(currentPageNumber);
     } catch (error) {
       console.log(error);
     }
+    setIsUserSearching(false);
   };
+
+  const handlePrevPage = () => {
+    if (currentPageNumber.current <= 1) {
+      resetPageNumber();
+    } else {
+      currentPageNumber.current--;
+      handleSearch();
+    }
+  };
+
+  const handleNextPage = () => {
+    if (searchResults === undefined) {
+      currentPageNumber.current = currentPageNumber.current;
+    } else {
+      currentPageNumber.current++;
+      handleSearch();
+    }
+  };
+
   return (
     <div className="whole-page">
       <div className="search-bar">
@@ -34,7 +62,7 @@ function MoviePosterCard(props) {
         />
         <button onClick={handleSearch}>Search</button>
         <ul className="movie-results">
-          {searchResults === undefined && (
+          {!searchResults && !isUserSearching && (
             <div className="no-results">
               There are no results for "{searchQuery}". Try another search
             </div>
@@ -65,25 +93,15 @@ function MoviePosterCard(props) {
         <div className="page-buttons">
           <button
             onClick={() => {
-              if (pageCount.current <= 1) {
-                pageCount.current = 1;
-              } else {
-                pageCount.current--;
-                handleSearch();
-              }
+              handlePrevPage();
             }}
           >
             Prev
           </button>
-          <button>{pageCount.current}</button>
+          <button>{currentPageNumber.current}</button>
           <button
             onClick={() => {
-              if (searchResults === undefined) {
-                pageCount.current = pageCount.current;
-              } else {
-                pageCount.current++;
-                handleSearch();
-              }
+              handleNextPage();
             }}
           >
             Next
