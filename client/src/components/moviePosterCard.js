@@ -9,12 +9,12 @@ function MoviePosterCard(props) {
 
   // Set default picture URL if pictureUrl is empty or null
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchQuery === "") {
       pageCount.current = 1;
       return;
     }
-    fetch(
+    await fetch(
       // `http://localhost:5001/api/search?searchQuery=${searchQuery}&page=${pageCount.current}`
       `https://omdbapi.com/?s=${searchQuery}&page=${pageCount.current}&apikey=4a3b711b`
     )
@@ -38,6 +38,11 @@ function MoviePosterCard(props) {
         />
         <button onClick={handleSearch}>Search</button>
         <ul className="movie-results">
+          {searchResults === undefined && (
+            <div className="no-results">
+              There are no more movies under "{searchQuery}". Try another search
+            </div>
+          )}
           {searchResults &&
             searchResults.map((result) => (
               <div className="movie-list" key={result.imdbID}>
@@ -77,8 +82,12 @@ function MoviePosterCard(props) {
           <button>{pageCount.current}</button>
           <button
             onClick={() => {
-              pageCount.current++;
-              handleSearch();
+              if (searchResults === undefined) {
+                pageCount.current = pageCount.current;
+              } else {
+                pageCount.current++;
+                handleSearch();
+              }
             }}
           >
             Next
