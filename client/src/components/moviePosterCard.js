@@ -15,6 +15,9 @@ function MoviePosterCard(props) {
   const newSearchQuery = () => {
     if (searchQuery !== currentSearchQuery) {
       setCurrentSearchQuery(searchQuery);
+      resetPageNumber();
+    }
+  };
 
   const handleSearch = async () => {
     if (searchQuery === "") {
