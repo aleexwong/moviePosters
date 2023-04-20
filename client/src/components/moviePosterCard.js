@@ -12,6 +12,9 @@ function MoviePosterCard(props) {
   const resetPageNumber = () => {
     currentPageNumber.current = 1;
   };
+  const newSearchQuery = () => {
+    if (searchQuery !== currentSearchQuery) {
+      setCurrentSearchQuery(searchQuery);
 
   const handleSearch = async () => {
     if (searchQuery === "") {
@@ -20,7 +23,6 @@ function MoviePosterCard(props) {
     }
     setIsUserSearching(true);
     try {
-      currentPageNumber.current = 1;
       const response = await fetch(
         `https://omdbapi.com/?s=${searchQuery}&page=${currentPageNumber.current}&apikey=4a3b711b`
       );
