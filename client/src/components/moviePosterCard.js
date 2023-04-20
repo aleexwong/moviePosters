@@ -3,20 +3,13 @@ import "./moviePosterCard.css";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MoviePosterCard(props) {
-  const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [isUserSearching, setIsUserSearching] = useState(false);
   const currentPageNumber = useRef(1);
+  const prevSearchQuery = useRef("");
 
   const resetPageNumber = () => {
     currentPageNumber.current = 1;
-  };
-  const newSearchQuery = () => {
-    if (searchQuery !== currentSearchQuery) {
-      setCurrentSearchQuery(searchQuery);
-      resetPageNumber();
-    }
   };
 
   const handleSearch = async () => {
@@ -24,18 +17,21 @@ function MoviePosterCard(props) {
       currentPageNumber.current = 1;
       return;
     }
-    setIsUserSearching(true);
+    // If search query is different from the previous search query, reset the page number back to 1
+    if (searchQuery !== prevSearchQuery.current) {
+      resetPageNumber();
+    }
     try {
       const response = await fetch(
         `https://omdbapi.com/?s=${searchQuery}&page=${currentPageNumber.current}&apikey=4a3b711b`
       );
       const data = await response.json();
       setSearchResults(data.Search);
-      console.log(currentPageNumber);
+      // Update the previous search query
+      prevSearchQuery.current = searchQuery;
     } catch (error) {
       console.log(error);
     }
-    setIsUserSearching(false);
   };
 
   const handlePrevPage = () => {
@@ -67,9 +63,9 @@ function MoviePosterCard(props) {
         />
         <button onClick={handleSearch}>Search</button>
         <ul className="movie-results">
-          {!searchResults && !isUserSearching && (
+          {!searchResults && (
             <div className="no-results">
-              There are no results for "{searchQuery}". Try another search
+              There are no results. Try another search
             </div>
           )}
           {searchResults &&
