@@ -28,58 +28,62 @@ function MoviePosterCard(props) {
   };
 
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Search for a movie"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-      <ul className="movie-results">
-        {searchResults &&
-          searchResults.map((result) => (
-            <div className="movie-list" key={result.imdbID}>
-              <div className="movie-list-image">
-                <img
-                  src={
-                    result.Poster && result.Poster !== "N/A"
-                      ? result.Poster
-                      : defaultPicture
-                  }
-                  alt={result.title}
-                />
+    <div className="whole-page">
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search for a movie"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+        <ul className="movie-results">
+          {searchResults &&
+            searchResults.map((result) => (
+              <div className="movie-list" key={result.imdbID}>
+                <div className="movie-list-image">
+                  <img
+                    src={
+                      result.Poster && result.Poster !== "N/A"
+                        ? result.Poster
+                        : defaultPicture
+                    }
+                    alt={result.title}
+                  />
+                </div>
+                <div className="movie-list-info">
+                  <div className="movie-list-title">{result.Title}</div>
+                  <div className="movie-list-year">{result.Year}</div>
+                  <div className="movie-list-button">
+                    <button>View</button>
+                  </div>
+                </div>
               </div>
-              <div className="movie-list-title">{result.Title}</div>
-              <div className="movie-list-year">{result.Year}</div>
-              <div className="movie-list-button">
-                <button>View</button>
-              </div>
-            </div>
-          ))}
-      </ul>
-      <div className="page-buttons">
-        <button
-          onClick={() => {
-            if (pageCount.current <= 1) {
-              pageCount.current = 1;
-            } else {
-              pageCount.current--;
+            ))}
+        </ul>
+        <div className="page-buttons">
+          <button
+            onClick={() => {
+              if (pageCount.current <= 1) {
+                pageCount.current = 1;
+              } else {
+                pageCount.current--;
+                handleSearch();
+              }
+            }}
+          >
+            Prev
+          </button>
+          <button>{pageCount.current}</button>
+          <button
+            onClick={() => {
+              pageCount.current++;
               handleSearch();
-            }
-          }}
-        >
-          Prev
-        </button>
-        <button>{pageCount.current}</button>
-        <button
-          onClick={() => {
-            pageCount.current++;
-            handleSearch();
-          }}
-        >
-          Next
-        </button>
+            }}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
