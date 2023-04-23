@@ -21,9 +21,7 @@ function MovieList(props) {
             <div className="movie-list-info">
               <div className="movie-list-title">{movie.Title}</div>
               <div className="movie-list-year">{movie.Year}</div>
-              <div className="movie-list-button">
-                <button>View</button>
-              </div>
+              <button>View</button>
             </div>
           </div>
         ))}
