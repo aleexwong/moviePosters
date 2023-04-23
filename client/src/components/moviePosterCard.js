@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 import MovieList from "./MovieList";
 import Pagination from "./Pagination";
 
-function MoviePosterCard(props) {
+function MoviePosterCard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const currentPageNumber = useRef(1);
@@ -58,11 +58,15 @@ function MoviePosterCard(props) {
         handleSearch={handleSearch}
       />
       <MovieList searchResults={searchResults} />
-      <Pagination
-        currentPageNumber={currentPageNumber.current}
-        handlePrevPage={handlePrevPage}
-        handleNextPage={handleNextPage}
-      />
+      <div className="render-buttons">
+        {searchResults != "" && (
+          <Pagination
+            currentPageNumber={currentPageNumber.current}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+          />
+        )}
+      </div>
     </div>
   );
 }

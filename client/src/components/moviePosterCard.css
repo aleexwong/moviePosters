@@ -41,12 +41,19 @@ button {
   color: #fff;
 }
 
+.movie-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
 .movie-list {
   display: inline-block;
   flex-wrap: wrap;
   justify-content: center;
   padding: 20px;
   max-width: 400px;
+  margin: auto;
 }
 .movie-list-info {
   margin-left: 10px;
