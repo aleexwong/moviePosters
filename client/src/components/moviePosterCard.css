@@ -2,7 +2,21 @@
   display: flex;
   max-width: 1920px;
   margin: 0 auto;
+  flex-direction: column;
 }
+button {
+  width: 30%;
+  height: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
 .search-bar {
   width: 100%;
   height: 100%;
@@ -22,18 +36,6 @@
   font-size: 16px;
   outline: none;
 }
-.search-bar button {
-  width: 30%;
-  height: 100%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  font-size: 16px;
-  outline: none;
-  background-color: #fff;
-  cursor: pointer;
-  margin-top: 10px;
-}
 .search-bar button:hover {
   background-color: slateblue;
   color: #fff;
@@ -44,8 +46,14 @@
   flex-wrap: wrap;
   justify-content: center;
   padding: 20px;
+  max-width: 400px;
 }
-.movie-list-image {
+.movie-list-info {
+  margin-left: 10px;
+}
+
+.movie-list img {
+  min-height: 300px;
   max-width: 300px;
   max-height: 400px;
   margin: 10px;
@@ -59,7 +67,7 @@
 .movie-list-title {
   font-size: 20px;
   font-weight: 600;
-  margin-top: 20%;
+  margin-top: 10%;
   margin-bottom: 10px;
   color: black;
   white-space: nowrap;
@@ -75,11 +83,10 @@
   margin-top: 20px;
   margin-left: 5px;
   padding: 20px;
-  width: 30%;
 }
 
 .page-buttons button {
-  width: 100%;
+  width: 30%;
   height: 100%;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -92,7 +99,7 @@
   margin-left: 5px;
   margin-right: 5px;
 }
-@media screen and (min-width: 769px) and (max-width: 1720px) {
+@media screen and (min-width: 769px) and (max-width: 1440px) {
   .movie-results {
     display: flex;
     flex-wrap: wrap;
@@ -102,9 +109,10 @@
   .movie-list-info {
     margin-left: 10px;
   }
-  .movie-list-image {
+  .movie-list img {
     max-width: 200px;
     max-height: 300px;
+    min-height: 300px;
   }
   .movie-list-title {
     font-size: 18px;
@@ -118,15 +126,29 @@
   .page-buttons {
     display: flex;
     padding: 30px;
-    width: 50%;
   }
 }
 
 @media screen and (max-width: 768px) {
+  .movie-list {
+    display: inline-block;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 40px;
+    max-width: 250px;
+  }
+  .movie-list-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10%;
+    margin-bottom: 10px;
+    color: black;
+    width: 250px;
+    word-wrap: break-word;
+  }
   .page-buttons {
     display: flex;
     padding: 30px;
-    width: 75%;
   }
 }
 
@@ -151,17 +173,16 @@
     padding: 20px;
   }
   .movie-list-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     margin-top: 20%;
     margin-bottom: 10px;
     color: black;
-    width: 200px;
+    width: 250px;
     word-wrap: break-word;
   }
   .page-buttons {
     display: flex;
     padding: 30px;
-    width: 75%;
   }
 }

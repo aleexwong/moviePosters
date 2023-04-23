@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import "./moviePosterCard.css";
-import defaultPicture from "../constants/images/default-movie-poster.png";
+import SearchBar from "./SearchBar";
+import MovieList from "./MovieList";
+import Pagination from "./Pagination";
 
 function MoviePosterCard(props) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,71 +46,23 @@ function MoviePosterCard(props) {
   };
 
   const handleNextPage = () => {
-    if (searchResults === undefined) {
-      currentPageNumber.current = currentPageNumber.current;
-    } else {
-      currentPageNumber.current++;
-      handleSearch();
-    }
+    currentPageNumber.current++;
+    handleSearch();
   };
 
   return (
     <div className="whole-page">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search for a movie"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-        <ul className="movie-results">
-          {!searchResults && (
-            <div className="no-results">
-              There are no results. Try another search
-            </div>
-          )}
-          {searchResults &&
-            searchResults.map((result) => (
-              <div className="movie-list" key={result.imdbID}>
-                <div className="movie-list-image">
-                  <img
-                    src={
-                      result.Poster && result.Poster !== "N/A"
-                        ? result.Poster
-                        : defaultPicture
-                    }
-                    alt={result.title}
-                  />
-                </div>
-                <div className="movie-list-info">
-                  <div className="movie-list-title">{result.Title}</div>
-                  <div className="movie-list-year">{result.Year}</div>
-                  <div className="movie-list-button">
-                    <button>View</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </ul>
-        <div className="page-buttons">
-          <button
-            onClick={() => {
-              handlePrevPage();
-            }}
-          >
-            Prev
-          </button>
-          <button>{currentPageNumber.current}</button>
-          <button
-            onClick={() => {
-              handleNextPage();
-            }}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+      />
+      <MovieList searchResults={searchResults} />
+      <Pagination
+        currentPageNumber={currentPageNumber.current}
+        handlePrevPage={handlePrevPage}
+        handleNextPage={handleNextPage}
+      />
     </div>
   );
 }
