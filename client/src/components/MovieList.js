@@ -8,6 +8,7 @@ function MovieList(props) {
     <ul className="movie-results">
       {!searchResults && (
         <div className="no-results">
+          <div className="movie-list"></div>
           There are no results. Try another search
         </div>
       )}

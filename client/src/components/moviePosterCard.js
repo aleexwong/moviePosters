@@ -8,6 +8,9 @@ function MoviePosterCard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const currentPageNumber = useRef(1);
+  const setCurrentPageNumber = (pageNumber) => {
+    currentPageNumber.current = pageNumber;
+  };
   const prevSearchQuery = useRef("");
 
   const resetPageNumber = () => {
@@ -29,6 +32,7 @@ function MoviePosterCard() {
       );
       const data = await response.json();
       setSearchResults(data.Search);
+      console.log(searchResults);
       // Update the previous search query
       prevSearchQuery.current = searchQuery;
     } catch (error) {
@@ -40,14 +44,26 @@ function MoviePosterCard() {
     if (currentPageNumber.current <= 1) {
       resetPageNumber();
     } else {
-      currentPageNumber.current--;
+      const prevPageNumber = currentPageNumber.current - 1;
+      setCurrentPageNumber(prevPageNumber);
       handleSearch();
+      // Scroll to the top of the page
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
 
   const handleNextPage = () => {
-    currentPageNumber.current++;
+    const nextPageNumber = currentPageNumber.current + 1;
+    setCurrentPageNumber(nextPageNumber);
     handleSearch();
+    // Scroll to the top of the page
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -59,7 +75,7 @@ function MoviePosterCard() {
       />
       <MovieList searchResults={searchResults} />
       <div className="render-buttons">
-        {searchResults != "" && (
+        {searchResults != undefined && searchResults != "" && (
           <Pagination
             currentPageNumber={currentPageNumber.current}
             handlePrevPage={handlePrevPage}
