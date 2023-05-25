@@ -32,7 +32,7 @@ function MoviePosterCard() {
       );
       const data = await response.json();
       setSearchResults(data.Search);
-      console.log(searchResults);
+      // console.log(searchResults);
       // Update the previous search query
       prevSearchQuery.current = searchQuery;
     } catch (error) {
