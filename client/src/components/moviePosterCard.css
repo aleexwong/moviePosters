@@ -66,6 +66,13 @@ button {
 .movie-list-info {
   margin-left: 10px;
 }
+/*.movie-list-info button:hover {
+  background-color: slateblue;
+  color: #fff;
+}
+Requirements asked for a button but when clicked it does 
+nothing, if uncommented it will change color upon click
+*/
 .movie-list-title {
   font-size: 20px;
   font-weight: 600;
