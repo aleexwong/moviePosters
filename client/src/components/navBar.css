@@ -5,3 +5,10 @@ nav {
   padding: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 }
+a.logo-link {
+  text-decoration: none; /* Remove underline */
+  color: #000;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 20px;
+}

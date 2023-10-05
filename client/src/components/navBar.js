@@ -4,7 +4,9 @@ import "./navBar.css";
 function NavBar() {
   return (
     <nav>
-      <h1>OMDb Search Portal</h1>
+      <a class="logo-link" href="../../index.js">
+        OMDb Search Portal
+      </a>
     </nav>
   );
 }
