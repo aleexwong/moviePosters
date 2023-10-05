@@ -5,6 +5,7 @@
   margin: 0 auto;
   flex-direction: column;
 }
+
 button {
   height: 100%;
   border-radius: 5px;
@@ -15,6 +16,10 @@ button {
   background-color: #fff;
   cursor: pointer;
   margin-top: 10px;
+}
+button:hover {
+  background-color: slateblue;
+  color: #fff;
 }
 
 .search-bar {
@@ -115,6 +120,7 @@ nothing, if uncommented it will change color upon click
   .movie-list img {
     max-height: 350px;
     min-height: 350px;
+    max-width: 250px;
   }
   .movie-list-title {
     font-size: 18px;

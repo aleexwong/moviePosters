@@ -1,4 +1,5 @@
 import React from "react";
+import "./MovieList.css";
 import defaultPicture from "../constants/images/default-movie-poster.png";
 
 function MovieList(props) {
@@ -8,8 +9,10 @@ function MovieList(props) {
     <ul className="movie-results">
       {!searchResults && (
         <div className="no-results">
-          <div className="movie-list"></div>
-          There are no results. Try another search
+          <div className="movie-list">
+            There are no results.
+            <p>Try another search such as "Batman" or "Star Wars".</p>
+          </div>
         </div>
       )}
       {searchResults &&

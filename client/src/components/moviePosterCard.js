@@ -26,13 +26,14 @@ function MoviePosterCard() {
     if (searchQuery !== prevSearchQuery.current) {
       resetPageNumber();
     }
+
     try {
       const response = await fetch(
         `https://omdbapi.com/?s=${searchQuery}&page=${currentPageNumber.current}&apikey=4a3b711b`
       );
       const data = await response.json();
       setSearchResults(data.Search);
-      // console.log(searchResults);
+      console.log(searchResults);
       // Update the previous search query
       prevSearchQuery.current = searchQuery;
     } catch (error) {
