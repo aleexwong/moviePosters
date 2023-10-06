@@ -12,6 +12,7 @@ function MovieList(props) {
           <div className="movie-list">
             There are no results.
             <p>Try another search such as "Batman" or "Star Wars".</p>
+            <a href="/">Reset the search</a>
           </div>
         </div>
       )}

@@ -2,13 +2,24 @@ import React from "react";
 import "./moviePosterCard.css";
 
 function Pagination(props) {
-  const { currentPageNumber, handlePrevPage, handleNextPage } = props;
+  const {
+    numberOfReturnSearchs,
+    currentPageNumber,
+    handlePrevPage,
+    handleNextPage,
+  } = props;
 
   return (
     <div className="page-buttons">
-      <button onClick={handlePrevPage}>Prev</button>
+      {/* <button onClick={handlePrevPage}>Prev</button> */}
+      {numberOfReturnSearchs >= 10 && (
+        <button onClick={handlePrevPage}>Prev</button>
+      )}
       <button>{currentPageNumber}</button>
-      <button onClick={handleNextPage}>Next</button>
+      {/* <button onClick={handleNextPage}>Next</button> */}
+      {numberOfReturnSearchs >= 10 && (
+        <button onClick={handleNextPage}>Next</button>
+      )}
     </div>
   );
 }

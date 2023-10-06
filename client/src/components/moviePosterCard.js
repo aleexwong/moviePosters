@@ -78,6 +78,7 @@ function MoviePosterCard() {
       <div className="render-buttons">
         {searchResults != undefined && searchResults != "" && (
           <Pagination
+            numberOfReturnSearchs={searchResults.length}
             currentPageNumber={currentPageNumber.current}
             handlePrevPage={handlePrevPage}
             handleNextPage={handleNextPage}
