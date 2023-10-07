@@ -17,7 +17,7 @@ function Pagination(props) {
       )}
       {numberOfReturnSearchs < 10 && currentPageNumber > 1 && (
         <button onClick={handlePrevPage}>Prev</button>
-        /* Handling the case of the very end page */
+        /* Handling the case of the very end of the search results*/
       )}
       {/* {currentPageNumber > 1 && <button onClick={handlePrevPage}>Prev</button>} */}
       <button>{currentPageNumber}</button>
