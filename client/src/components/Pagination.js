@@ -1,5 +1,5 @@
 import React from "react";
-import "./moviePosterCard.css";
+import "./Pagination.css";
 
 function Pagination(props) {
   const {
@@ -12,7 +12,7 @@ function Pagination(props) {
   return (
     <div className="page-buttons">
       {currentPageNumber > 1 && <button onClick={handlePrevPage}>Prev</button>}
-      <button>{currentPageNumber}</button>
+      <button> {currentPageNumber}</button>
       {numberOfReturnSearchs >= 10 && (
         <button onClick={handleNextPage}>Next</button>
       )}

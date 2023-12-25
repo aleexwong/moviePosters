@@ -20,6 +20,7 @@ function MovieList(props) {
         searchResults.map((movie) => (
           <div className="movie-list" key={movie.imdbID}>
             <img
+              className="default-movie-poster"
               src={movie.Poster === "N/A" ? defaultPicture : movie.Poster}
               alt={movie.Title}
             />
